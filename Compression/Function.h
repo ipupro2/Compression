@@ -13,5 +13,4 @@ struct Node
 };
 
 void Swap(Node*& a, Node*& b);
-bool IsIn(vector<Node>& datas, char c);
 vector<Node*> CountFrequency(FILE*& inFile);

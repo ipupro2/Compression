@@ -137,11 +137,7 @@
     <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="decompress.txt" />
     <Text Include="IN.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="18120615.zip" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

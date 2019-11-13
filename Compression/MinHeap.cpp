@@ -1,4 +1,4 @@
-#include "MinHeap.h"
+﻿#include "MinHeap.h"
 
 int MinHeap::Size()
 {
@@ -34,7 +34,8 @@ void MinHeap::Insert(Node* data)
 	size++;
 }
 
-Node* MinHeap::ExtractMin()
+//Trả về giá trị nhỏ nhất trong min heap(tức root) và loại nó ra khỏi heap
+Node* MinHeap::PopMin()
 {
 	Node* node = datas[0];
 	size--;

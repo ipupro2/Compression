@@ -49,15 +49,7 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="18120615.zip">
-      <Filter>Resource Files</Filter>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
     <Text Include="IN.txt">
-      <Filter>Resource Files</Filter>
-    </Text>
-    <Text Include="decompress.txt">
       <Filter>Resource Files</Filter>
     </Text>
   </ItemGroup>

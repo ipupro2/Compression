@@ -1,6 +1,6 @@
 #include "MinHeap.h"
 
-#define Dictionary vector<Word>
+#define CodeBook vector<Word>
 
 struct Word
 {
@@ -11,9 +11,9 @@ struct Word
 Node* CreateNode(char data, int freq);
 bool IsLeaf(Node* node);
 Node* BuildHuffmanTree(vector<Node*>& datas);
-void BuildDictionary(Node* root, Dictionary& dict, string cur = "");
-void PrintDictionary(Dictionary& dict);
-string LookUpDictionary(Dictionary& dict, char c, int low, int high);
-void SortDictionary(Dictionary& dict, int low, int high);
+void BuildCodeBook(Node* root, CodeBook& dict, string cur = "");
+void PrintCodeBook(CodeBook& dict);
+string LookUpCodeBook(CodeBook& dict, char c, int low, int high);
+void SortCodeBook(CodeBook& dict, int low, int high);
 bool Traverse(Node* dict, string& s, char& c, int index = 0);
 void PrintTree(Node* node);

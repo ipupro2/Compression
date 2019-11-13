@@ -1,56 +1,50 @@
 ﻿#include "Compress.h"
 #include <cstring>
 
-void Compress(const char* inFileName, const char* outFileName)
+void EncodeDescription(FILE* &outFile, const char* inFileName, vector<Node*>& datas)
 {
-	FILE* inFile;
-	fopen_s(&inFile, inFileName, "rb");
-	FILE* outFile;
-	fopen_s(&outFile, outFileName, "wb");
-	if (!inFile || !outFile)
-	{
-		cout << "File's not exist\n";
-		return;
-	}
-
-	vector<Node*> datas = CountFrequency(inFile);
-	Node* node = BuildHuffmanTree(datas);
-	Dictionary dict;
-	BuildDictionary(node, dict);
-	SortDictionary(dict, 0, dict.size() - 1);
-
-	fseek(inFile, 0, SEEK_SET);
-
-	char c;
-	char bit = 0;
-	string code;
-	int pos = 7;
-
-	//Nhúng header vào file
+	//Nhúng header vào file - nếu nó đúng header thì mới được phép giải nén
 	fwrite("tzip", 4, 1, outFile);
-	//Nhúng số lượng ký tự gốc vào file
-	fwrite(&(node->freq), sizeof(int), 1, outFile);
+
+	int nDatas = datas.size();
 	//Nhúng tên file ban đầu
 	fwrite(inFileName, strlen(inFileName) + 1, 1, outFile);
+	//Nhúng số lượng ký tự gốc vào file
+	fwrite(&nDatas, sizeof(int), 1, outFile);
 
-	//Nhúng số bộ dữ liệu
-	int nData = datas.size();
-	fwrite(&nData, sizeof(int), 1, outFile);
 	//Nhúng dữ liệu và tần suất vào file
-	for (int i = 0; i < nData; i++)
+	for (int i = 0; i < nDatas; i++)
 	{
 		fwrite(&datas[i]->data, 1, 1, outFile);
 		fwrite(&datas[i]->freq, sizeof(int), 1, outFile);
 	}
-	cout << "\nUsed " << (nData*(1+sizeof(int))+strlen(inFileName)+sizeof(int)+4) << " bytes to store file properties\n";
+	cout << "\nUsed " << (nDatas * (1 + sizeof(int)) + strlen(inFileName) + sizeof(int) + 4) << " bytes to store file descriptions\n";
+}
+
+void EncodeFileData(FILE*& inFile, FILE* &outFile, vector<Node*>& datas)
+{
+	Node* node = BuildHuffmanTree(datas);
+	CodeBook dict;
+	BuildCodeBook(node, dict);
+	//Sắp xếp trước code book để truy xuất bằng tìm kiếm nhị phân nhanh hơn
+	SortCodeBook(dict, 0, dict.size() - 1);
+
+	fseek(inFile, 0, SEEK_SET);
+	
+	char bit = 0;
+	string code;
+	int pos = 7;
 	char* s = new char[node->freq + 1];
 	char* compressed = new char[node->freq + 1];
 	int compressedIndex = 0;
+
+	//Nhúng số ký tự ban đầu trong file
+	fwrite(&node->freq, sizeof(int), 1, outFile);
 	fread(s, node->freq, 1, inFile);
 
 	for (int i = 0; i < node->freq; i++)
 	{
-		code = LookUpDictionary(dict, s[i], 0, dict.size() - 1);
+		code = LookUpCodeBook(dict, s[i], 0, dict.size() - 1);
 		for (int j = 0; j < code.size(); j++)
 		{
 			if (code[j] == '1')
@@ -67,7 +61,29 @@ void Compress(const char* inFileName, const char* outFileName)
 	compressed[compressedIndex++] = bit;
 	compressed[compressedIndex] = '\0';
 	fwrite(compressed, compressedIndex, 1, outFile);
-	_fcloseall();
+}
+
+void Compress(const char* inFileName, const char* outFileName)
+{
+	FILE* inFile;
+	fopen_s(&inFile, inFileName, "rb");
+	FILE* outFile;
+	fopen_s(&outFile, outFileName, "wb");
+	if (!inFile || !outFile)
+	{
+		if (inFile)
+			fclose(inFile);
+		if (outFile)
+			fclose(outFile);
+		cout << "File's not exist\n";
+		return;
+	}
+	vector<Node*> datas = CountFrequency(inFile);
+	EncodeDescription(outFile, inFileName, datas);
+	EncodeFileData(inFile, outFile, datas);
+
+	fclose(inFile);
+	fclose(outFile);
 }
 
 void Decompress(const char* fileName)
@@ -88,10 +104,6 @@ void Decompress(const char* fileName)
 		}
 	}
 	delete[]header;
-
-	//Đọc số lượng ký tự có trong file gốc
-	int length = 0;
-	fread(&length, sizeof(int), 1, inFile);
 
 	char* path = new char[100];
 	for (int i = 0; i < 100; i++)
@@ -123,7 +135,9 @@ void Decompress(const char* fileName)
 		return;
 	string bits;
 	char c = 0, temp = 0;
-
+	//Đọc số lượng ký tự có trong file gốc
+	int length = 0;
+	fread(&length, sizeof(int), 1, inFile);
 	c = fgetc(inFile);
 	while (!feof(inFile))
 	{
@@ -142,6 +156,10 @@ void Decompress(const char* fileName)
 		if (length == 0)
 			break;
 		c = fgetc(inFile);
+	}
+	if (length > 0)
+	{
+		cout << "File is broken!\n";
 	}
 	_fcloseall();
 }

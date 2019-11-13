@@ -11,7 +11,7 @@ public:
 	int Size();
 	void Heapify(int pos);
 	void Insert(Node* data);
-	Node* ExtractMin();
+	Node* PopMin();
 	MinHeap();
 	MinHeap(vector<Node*>& inData);
 };
