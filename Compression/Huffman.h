@@ -1,4 +1,5 @@
 #include "MinHeap.h"
+#include <unordered_map>
 
 #define CodeBook vector<Word>
 
@@ -12,7 +13,7 @@ Node* CreateNode(char data, int freq);
 bool IsLeaf(Node* node);
 Node* BuildHuffmanTree(vector<Node*>& datas);
 void DeleteTree(Node* root);
-void BuildCodeBook(Node* root, CodeBook& dict, string cur = "");
+void BuildCodeBook(Node* root, unordered_map<char, string>& codeBook, string cur = "");
 void PrintCodeBook(CodeBook& dict);
 string LookUpCodeBook(CodeBook& dict, char c, int low, int high);
 void SortCodeBook(CodeBook& dict, int low, int high);

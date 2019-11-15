@@ -31,10 +31,10 @@ void EncodeTree(BinaryWriter& writer, Node*& node)
 void EncodeFileData(BinaryReader& reader, BinaryWriter& writer, vector<Node*>& datas)
 {
 	Node* node = BuildHuffmanTree(datas);
-	CodeBook dict;
-	BuildCodeBook(node, dict);
-	//Sắp xếp trước code book để truy xuất bằng tìm kiếm nhị phân nhanh hơn
-	SortCodeBook(dict, 0, dict.size() - 1);
+	
+	unordered_map<char, string> codeBook;
+	BuildCodeBook(node, codeBook);
+
 	//Lưu cây lại
 	EncodeTree(writer, node);
 
@@ -46,7 +46,7 @@ void EncodeFileData(BinaryReader& reader, BinaryWriter& writer, vector<Node*>& d
 	int length = 0;
 	while (!reader.IsEOF())
 	{
-		code = LookUpCodeBook(dict, c, 0, dict.size() - 1);
+		code = codeBook[c];
 		for (int i = 0; i < code.size(); i++)
 		{
 			length++;
