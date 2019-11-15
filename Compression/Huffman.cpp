@@ -29,14 +29,23 @@ Node* BuildHuffmanTree(vector<Node*>& datas)
 	Node* left, * right, * top;
 	while (heap.Size() != 1)
 	{
-		left = heap.PopMin();
-		right = heap.PopMin();
-		top = CreateNode('i', left->freq + right->freq);
+		left = heap.ExtractMin();
+		right = heap.ExtractMin();
+		top = CreateNode(NULL, left->freq + right->freq);
 		top->left = left;
 		top->right = right;
 		heap.Insert(top);
 	}
-	return heap.PopMin();
+	return heap.ExtractMin();
+}
+
+void DeleteTree(Node* root)
+{
+	if (root == NULL)
+		return;
+	DeleteTree(root->left);
+	DeleteTree(root->right);
+	delete root;
 }
 
 //Chuỗi bit cho c trong codebook bằng tìm nhị phân
@@ -114,7 +123,7 @@ bool Traverse(Node* dict, string& s, char& c, int index)
 {
 	if (dict == NULL)
 		return 0;
-	if (dict->left == NULL && dict->right == NULL)
+	if (IsLeaf(dict))
 	{
 		if (index == s.length())
 		{
@@ -125,7 +134,7 @@ bool Traverse(Node* dict, string& s, char& c, int index)
 	}
 	if (index >= s.length())
 		return 0;
-	if (s[index] == '0')
+	if (s[index] == 0)
 		return Traverse(dict->left, s, c, index + 1);
 	return Traverse(dict->right, s, c, index + 1);
 }

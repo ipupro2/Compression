@@ -1,4 +1,6 @@
 #include "Compress.h"
+#include <chrono>
+using namespace chrono;
 
 int main()
 {
@@ -19,8 +21,13 @@ int main()
 			cin.getline(s1, 100);
 			cout << "Output file: ";
 			cin.getline(s2, 100);
+
+			auto start = high_resolution_clock::now();
 			Compress(s1, s2);
-			cout << "Compressed!!\n";
+			auto stop = high_resolution_clock::now();
+			auto duration = duration_cast<microseconds>(stop - start);
+			cout << "Operation tooks " << duration.count() << " microseconds\n";
+
 			delete[]s1;
 			delete[]s2;
 		}
@@ -30,14 +37,24 @@ int main()
 			cout << "Input name: ";
 			cin.ignore(1);
 			cin.getline(s, 100);
+
+			auto start = high_resolution_clock::now();
 			Decompress(s);
-			cout << "Extracted!!\n";
+			auto stop = high_resolution_clock::now();
+			auto duration = duration_cast<microseconds>(stop - start);
+			cout << "Operation tooks " << duration.count() << " microseconds\n";
+
 			delete[]s;
 		}
-		else
+		else if(option == 3)
 		{
 			exit(0);
 		}
+		else
+		{
+			cout << "Wrong input!!!\n";
+		}
+		cout << "---------------------------\n";
 	}
 	return 0;
 }

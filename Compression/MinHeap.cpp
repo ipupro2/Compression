@@ -35,7 +35,7 @@ void MinHeap::Insert(Node* data)
 }
 
 //Trả về giá trị nhỏ nhất trong min heap(tức root) và loại nó ra khỏi heap
-Node* MinHeap::PopMin()
+Node* MinHeap::ExtractMin()
 {
 	Node* node = datas[0];
 	size--;

@@ -123,6 +123,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BinaryReader.cpp" />
+    <ClCompile Include="BinaryWriter.cpp" />
     <ClCompile Include="Compress.cpp" />
     <ClCompile Include="Function.cpp" />
     <ClCompile Include="MinHeap.cpp" />
@@ -130,6 +132,8 @@
     <ClCompile Include="Source.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BinaryReader.h" />
+    <ClInclude Include="BinaryWriter.h" />
     <ClInclude Include="Compress.h" />
     <ClInclude Include="Function.h" />
     <ClInclude Include="MinHeap.h" />
@@ -138,6 +142,9 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="IN.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="a.tzip" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
