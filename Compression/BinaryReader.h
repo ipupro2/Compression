@@ -16,6 +16,7 @@ public:
 	char ReadBit();
 	char ReadByte();
 	int ReadInt();
+	void CompleteByte();
 
 	BinaryReader(const char* fileName);
 	BinaryReader(FILE* file);

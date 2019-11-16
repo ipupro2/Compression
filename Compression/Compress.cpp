@@ -2,9 +2,6 @@
 
 void EncodeDescription(BinaryWriter& writer, const char* inFileName, vector<Node*>& datas)
 {
-	//Nhúng header vào file - nếu nó đúng header thì mới được phép giải nén
-	writer.WriteByte('t');
-	writer.WriteByte('z');
 	int nameLength = strlen(inFileName);
 	for (int i = 0; i <= nameLength; i++)
 	{
@@ -58,13 +55,13 @@ void EncodeFileData(BinaryReader& reader, BinaryWriter& writer, vector<Node*>& d
 	DeleteTree(node);
 }
 
-void Compress(const char* inFileName, const char* outFileName)
+void Compress(const char* inFileName, BinaryWriter &writer, const char* directory)
 {
+	char* filePath = new char[100];
+	strcpy_s(filePath, 100, directory);
+	strcat_s(filePath, 100, inFileName);
 	FILE* inFile;
-	fopen_s(&inFile, inFileName, "rb");
-
-	BinaryReader reader(inFileName);
-	BinaryWriter writer(outFileName);
+	fopen_s(&inFile, filePath, "rb");
 
 	if (!(inFile && writer.IsOpened()))
 	{
@@ -75,11 +72,20 @@ void Compress(const char* inFileName, const char* outFileName)
 	}
 
 	vector<Node*> datas = CountFrequency(inFile);
+	fclose(inFile);
+	BinaryReader reader(filePath);
 
 	EncodeDescription(writer, inFileName, datas);
 	EncodeFileData(reader, writer, datas);
+}
 
-	fclose(inFile);
+void CompressFile(const char* inFileName, const char* outFileName)
+{
+	BinaryWriter writer(outFileName);
+	writer.WriteByte('t');
+	writer.WriteByte('z');
+	writer.WriteInt(1);
+	Compress(inFileName, writer, "");
 }
 
 Node* DecodeTree(BinaryReader& reader)
@@ -111,40 +117,45 @@ void Decompress(const char* fileName)
 		}
 	}
 
-	//Read name
-	char* outFileName = new char[100], c;
-	int i;
-	for (i = 0; (c = reader.ReadByte()) && i < 100; i++)
-		outFileName[i] = c;
-	outFileName[i] = '\0';
-
-	BinaryWriter writer(outFileName);
-
-	delete[] outFileName;
-	if(!writer.IsOpened())
-		return;
-
-	Node* node = DecodeTree(reader);
-	//Đọc số lượng ký tự có trong file gốc
-	int length = reader.ReadInt();
-
-	string bits;
-	char temp = 0;
-	c = reader.ReadBit();
-	while (!reader.IsEOF())
+	int nFile = reader.ReadInt();
+	for (int fileIndex = 0; fileIndex < nFile; fileIndex++)
 	{
-		bits += c;
-		if (Traverse(node, bits, temp))
-		{
-			writer.WriteByte(temp);
-			bits = "";
-			length--;
-		}
-		if (length == 0)
-			break;
+		//Read name
+		char* outFileName = new char[100], c;
+		int i;
+		for (i = 0; (c = reader.ReadByte()) && i < 100; i++)
+			outFileName[i] = c;
+		outFileName[i] = '\0';
+
+		BinaryWriter writer(outFileName);
+
+		delete[] outFileName;
+		if (!writer.IsOpened())
+			return;
+
+		Node* node = DecodeTree(reader);
+		//Đọc số lượng ký tự có trong file gốc
+		int length = reader.ReadInt();
+
+		string bits;
+		char temp = 0;
 		c = reader.ReadBit();
+		while (!reader.IsEOF())
+		{
+			bits += c;
+			if (Traverse(node, bits, temp))
+			{
+				writer.WriteByte(temp);
+				bits = "";
+				length--;
+			}
+			if (length == 0)
+				break;
+			c = reader.ReadBit();
+		}
+		if (length != 0)
+			cout << "File is corrupted!\n";
+		DeleteTree(node);
+		reader.CompleteByte();
 	}
-	if (length != 0)
-		cout << "File is corrupted!\n";
-	DeleteTree(node);
 }

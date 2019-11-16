@@ -63,6 +63,13 @@ int BinaryReader::ReadInt()
 	fread(&curByte, 1, 1, reader);
 	return a;
 }
+void BinaryReader::CompleteByte()
+{
+	if (bitPos == 7)
+		return;
+	bitPos = 7;
+	fread(&curByte, 1, 1, reader);
+}
 BinaryReader::BinaryReader(const char* fileName)
 {
 	fopen_s(&reader, fileName, "rb");

@@ -36,6 +36,9 @@
     <ClCompile Include="BinaryReader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="FolderProcessing.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Function.h">
@@ -57,6 +60,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="BinaryReader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FolderProcessing.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

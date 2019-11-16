@@ -126,6 +126,7 @@
     <ClCompile Include="BinaryReader.cpp" />
     <ClCompile Include="BinaryWriter.cpp" />
     <ClCompile Include="Compress.cpp" />
+    <ClCompile Include="FolderProcessing.cpp" />
     <ClCompile Include="Function.cpp" />
     <ClCompile Include="MinHeap.cpp" />
     <ClCompile Include="Huffman.cpp" />
@@ -135,6 +136,7 @@
     <ClInclude Include="BinaryReader.h" />
     <ClInclude Include="BinaryWriter.h" />
     <ClInclude Include="Compress.h" />
+    <ClInclude Include="FolderProcessing.h" />
     <ClInclude Include="Function.h" />
     <ClInclude Include="MinHeap.h" />
     <ClInclude Include="Huffman.h" />
