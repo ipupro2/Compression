@@ -47,9 +47,6 @@
     <ClInclude Include="MinHeap.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="resource.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Huffman.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -65,15 +62,5 @@
     <ClInclude Include="FolderProcessing.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="IN.txt">
-      <Filter>Resource Files</Filter>
-    </Text>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="a.tzip">
-      <Filter>Resource Files</Filter>
-    </None>
   </ItemGroup>
 </Project>

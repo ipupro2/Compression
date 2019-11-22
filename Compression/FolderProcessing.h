@@ -1,4 +1,3 @@
 #include "Compress.h"
-#include <Windows.h>
 
-void CompressFolder(const char* folderName, const char* outFileName);
+void CompressFolder(const char* folderName, BinaryWriter& writer, bool header = true);

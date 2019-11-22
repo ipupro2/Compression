@@ -1,6 +1,7 @@
 #include "Huffman.h"
 #include "BinaryWriter.h"
 #include "BinaryReader.h"
+#include <Windows.h>
 
 struct Header
 {
@@ -12,4 +13,4 @@ void EncodeFileData(BinaryReader& reader, BinaryWriter& writer, vector<Node*>& d
 Node* DecodeTree(BinaryReader& reader);
 void Compress(const char* inFileName, BinaryWriter& writer, const char* directory = "/");
 void CompressFile(const char* inFileName, const char* outFileName);
-void Decompress(const char* fileName);
+void Decompress(const char* folder, BinaryReader& reader, bool header);

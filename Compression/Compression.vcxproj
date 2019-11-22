@@ -140,13 +140,6 @@
     <ClInclude Include="Function.h" />
     <ClInclude Include="MinHeap.h" />
     <ClInclude Include="Huffman.h" />
-    <ClInclude Include="resource.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="IN.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="a.tzip" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

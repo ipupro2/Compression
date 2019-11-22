@@ -38,37 +38,45 @@ int main()
 		}
 		else if(option == 2)
 		{
-			char* s1 = new char[100];
-			char* s2 = new char[100];
+			char* s1 = new char[1000];
+			char* s2 = new char[1000];
 			cout << "Input name: ";
 			cin.ignore(1);
-			cin.getline(s1, 100);
-			strcat_s(s1, 100, "/*");
+			cin.getline(s1, 1000);
+			strcat_s(s1, 1000, "/*");
 			cout << "Output file: ";
-			cin.getline(s2, 100);
+			cin.getline(s2, 1000);
 			if (s2[0] == '\0')
 			{
-				strcpy_s(s2, 100, s1);
-				strcat_s(s2, 100, ".tz");
+				strcpy_s(s2, 1000, s1);
+				strcat_s(s2, 1000, ".tz");
 			}
-			CompressFolder(s1, s2);
+			auto start = high_resolution_clock::now();
+			BinaryWriter writer(s2);
+			CompressFolder(s1, writer);
+			auto stop = high_resolution_clock::now();
+			auto duration = duration_cast<microseconds>(stop - start);
+			cout << "Operation tooks " << duration.count() << " microseconds\n";
 			delete[]s1;
 			delete[]s2;
 		}
 		else if(option == 3)
 		{
-			char* s = new char[100];
+			char* s1 = new char[1000];
+			char* s2 = new char[1000];
 			cout << "Input name: ";
 			cin.ignore(1);
-			cin.getline(s, 100);
-
+			cin.getline(s1, 1000);
+			cout << "Output folder: ";
+			cin.getline(s2, 1000);
 			auto start = high_resolution_clock::now();
-			Decompress(s);
+			BinaryReader reader(s1);
+			Decompress(s2, reader, true);
 			auto stop = high_resolution_clock::now();
 			auto duration = duration_cast<microseconds>(stop - start);
 			cout << "Operation tooks " << duration.count() << " microseconds\n";
 
-			delete[]s;
+			delete[]s1;
 		}
 		else if(option == 4)
 		{
@@ -78,7 +86,7 @@ int main()
 		{
 			cout << "Wrong input!!!\n";
 		}
-		cout << "---------------------------\n";
+		cout << "\b---------------------------\n";
 	}
 	return 0;
 }

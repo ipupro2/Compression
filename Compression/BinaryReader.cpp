@@ -47,10 +47,10 @@ char BinaryReader::ReadByte()
 	{
 		for (int i = 7; i >= 0; i--)
 		{
+			EmptyByte();
 			if ((curByte >> bitPos) & 1)
 				c |= 1 << i;
 			bitPos--;
-			EmptyByte();
 		}
 	}
 	return c;
@@ -59,16 +59,31 @@ int BinaryReader::ReadInt()
 {
 	int a;
 	fread(&a, sizeof(int), 1, reader);
-	bitPos = 7;
-	fread(&curByte, 1, 1, reader);
+	bitPos = -1;
 	return a;
 }
+
+char* BinaryReader::ReadName()
+{
+	char* s = new char[1000];
+	int i;
+	CompleteByte();
+	fread(&curByte, 1, 1, reader);
+	for (i = 0; curByte != '\0'; i++)
+	{
+		s[i] = curByte;
+		fread(&curByte, 1, 1, reader);
+	}
+	bitPos = -1;
+	s[i] = '\0';
+	return s;
+}
+
 void BinaryReader::CompleteByte()
 {
 	if (bitPos == 7)
 		return;
-	bitPos = 7;
-	fread(&curByte, 1, 1, reader);
+	bitPos = -1;
 }
 BinaryReader::BinaryReader(const char* fileName)
 {
