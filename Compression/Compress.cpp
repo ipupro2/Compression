@@ -72,7 +72,6 @@ void EncodeFileData(BinaryReader& reader, BinaryWriter& writer, vector<Node*>& d
 		}
 		c = reader.ReadByte();
 	}
-
 	DeleteTree(node);
 }
 
@@ -149,7 +148,7 @@ void Decompress(const char* folder, BinaryReader& reader, bool header)
 		{
 			if (reader.ReadByte() != "tz"[i])
 			{
-				cout << "Wrong format!!";
+				cout << "Wrong format, cannot decompress!!\n";
 				return;
 			}
 		}
@@ -187,8 +186,6 @@ void Decompress(const char* folder, BinaryReader& reader, bool header)
 			return;
 
 		Node* node = DecodeTree(reader);
-		unordered_map<char, string> codeBook;
-		BuildCodeBook(node, codeBook);
 		
 		//Đọc số lượng ký tự có trong file gốc
 		int length = reader.ReadInt();
@@ -196,22 +193,26 @@ void Decompress(const char* folder, BinaryReader& reader, bool header)
 		string bits;
 		char temp = 0;
 		char c;
-		c = reader.ReadBit();
-		while (!reader.IsEOF())
-		{
-			bits += c;
-			if (Traverse(node, bits, temp))
-			{
-				writer.WriteByte(temp);
-				bits = "";
-				length--;
-			}
-			if (length == 0)
-				break;
-			c = reader.ReadBit();
-		}
 		if (length != 0)
-			cout << "File is corrupted!\n";
+		{
+			c = reader.ReadBit();
+			while (!reader.IsEOF())
+			{
+				bits += c;
+				if (Traverse(node, bits, temp))
+				{
+					writer.WriteByte(temp);
+					bits = "";
+					length--;
+				}
+				if (length == 0)
+					break;
+				c = reader.ReadBit();
+			}
+			writer.WriteRemain();
+			if (length != 0)
+				cout << "File is corrupted!\n";
+		}
 		DeleteTree(node);
 		reader.CompleteByte();
 	}

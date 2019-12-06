@@ -1,5 +1,15 @@
 ﻿#include "BinaryWriter.h"
 
+void BinaryWriter::WriteToBuffer(char c)
+{
+	buffer[bufferIndex++] = c;
+	if (bufferIndex >= maxBufferSize)
+	{
+		fwrite(buffer, maxBufferSize, 1, writer);
+		bufferIndex = 0;
+	}
+}
+
 //Kiểm tra file đã mở thành công không
 bool BinaryWriter::IsOpened()
 {
@@ -22,7 +32,7 @@ void BinaryWriter::FullByte()
 	if (bytePos == -1)
 	{
 		bytePos = 7;
-		fwrite(&curByte, 1, 1, writer);
+		WriteToBuffer(curByte);
 		curByte = 0;
 	}
 }
@@ -41,14 +51,17 @@ void BinaryWriter::WriteBit(char c)
 void BinaryWriter::WriteInt(int c)
 {
 	WriteRemain();
-	fwrite(&c, sizeof(int), 1, writer);
+	WriteToBuffer((char)(c & 0xFF));
+	WriteToBuffer((char)((c >> 8) & 0xFF));
+	WriteToBuffer((char)((c >> 16) & 0xFF));
+	WriteToBuffer((char)((c >> 24) & 0xFF));
 }
 
 void BinaryWriter::WriteByte(char c)
 {
 	if (bytePos == 7)
 	{
-		fwrite(&c, 1, 1, writer);
+		WriteToBuffer(c);
 		return;
 	}
 	for (int i = 7; i >= 0; i--)
@@ -65,7 +78,7 @@ void BinaryWriter::WriteRemain()
 {
 	if (bytePos == 7)
 		return;
-	fwrite(&curByte, 1, 1, writer);
+	WriteToBuffer(curByte);
 	bytePos = 7;
 	curByte = 0;
 }
@@ -73,6 +86,15 @@ void BinaryWriter::WriteRemain()
 BinaryWriter::BinaryWriter(const char* fileName)
 {
 	fopen_s(&writer, fileName, "wb");
+	if (writer)
+	{
+		buffer = new char[maxBufferSize];
+	}
+	else
+	{
+		buffer = NULL;
+	}
+	bufferIndex = 0;
 	curByte = 0;
 	bytePos = 7;
 }
@@ -80,12 +102,30 @@ BinaryWriter::BinaryWriter(const char* fileName)
 BinaryWriter::BinaryWriter(FILE*& file)
 {
 	writer = file;
+	if (writer)
+	{
+		buffer = new char[maxBufferSize];
+	}
+	else
+	{
+		buffer = NULL;
+	}
+	bufferIndex = 0;
+	bufferIndex = 0;
 	curByte = 0;
 	bytePos = 0;
+}
+
+void BinaryWriter::WriteBuffer()
+{
+	if (bufferIndex > 0)
+		fwrite(buffer, bufferIndex, 1, writer);
+	bufferIndex = 0;
 }
 
 BinaryWriter::~BinaryWriter()
 {
 	WriteRemain();
+	WriteBuffer();
 	fclose(writer);
 }

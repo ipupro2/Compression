@@ -6,7 +6,7 @@ int main()
 {
 	while (1)
 	{
-		cout << "Choose options: \n";
+		cout << "Choose option: \n";
 		cout << "1. Compress file\n";
 		cout << "2. Compress folder\n";
 		cout << "3. Extract\n";
@@ -31,7 +31,7 @@ int main()
 			CompressFile(s1, s2);
 			auto stop = high_resolution_clock::now();
 			auto duration = duration_cast<microseconds>(stop - start);
-			cout << "Operation tooks " << duration.count() << " microseconds\n";
+			cout << "Operation took " << duration.count() << " microseconds\n";
 
 			delete[]s1;
 			delete[]s2;
@@ -56,7 +56,7 @@ int main()
 			CompressFolder(s1, writer);
 			auto stop = high_resolution_clock::now();
 			auto duration = duration_cast<microseconds>(stop - start);
-			cout << "Operation tooks " << duration.count() << " microseconds\n";
+			cout << "Operation took " << duration.count() << " microseconds\n";
 			delete[]s1;
 			delete[]s2;
 		}
@@ -74,7 +74,7 @@ int main()
 			Decompress(s2, reader, true);
 			auto stop = high_resolution_clock::now();
 			auto duration = duration_cast<microseconds>(stop - start);
-			cout << "Operation tooks " << duration.count() << " microseconds\n";
+			cout << "Operation took " << duration.count() << " microseconds\n";
 
 			delete[]s1;
 		}
@@ -86,7 +86,7 @@ int main()
 		{
 			cout << "Wrong input!!!\n";
 		}
-		cout << "\b---------------------------\n";
+		cout << "\a---------------------------\n";
 	}
 	return 0;
 }

@@ -8,6 +8,15 @@ private:
 	char curByte;
 	int bitPos;
 
+	//Buffer
+	size_t bufferSize;
+	const size_t maxBufferSize = 4194304;
+	char* buffer;
+	size_t bufferIndex;
+	size_t fileLength;
+	size_t fileIndex;
+
+	char ReadFromBuffer();
 public:
 	bool IsOpened();
 	bool IsEOF();

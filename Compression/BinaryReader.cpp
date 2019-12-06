@@ -1,4 +1,23 @@
-#include "BinaryReader.h"
+﻿#include "BinaryReader.h"
+
+char BinaryReader::ReadFromBuffer()
+{
+	if (bufferSize == 0)
+	{
+		fread(buffer, 1, 1, reader);
+		return 0;
+	}
+	char c = buffer[bufferIndex++];
+	if (bufferIndex >= bufferSize && ! IsEOF())
+	{
+		bufferSize = (fileLength - fileIndex) < maxBufferSize ? (fileLength - fileIndex) : maxBufferSize;
+		bufferIndex = 0;
+		fileIndex += bufferSize;
+		if (bufferSize > 0)
+			fread(buffer, bufferSize, 1, reader);
+	}
+	return c;
+}
 
 bool BinaryReader::IsOpened()
 {
@@ -24,7 +43,7 @@ void BinaryReader::EmptyByte()
 	if (bitPos == -1)
 	{
 		bitPos = 7;
-		fread(&curByte, 1, 1, reader);
+		curByte = ReadFromBuffer();
 	}
 }
 char BinaryReader::ReadBit()
@@ -58,7 +77,10 @@ char BinaryReader::ReadByte()
 int BinaryReader::ReadInt()
 {
 	int a;
-	fread(&a, sizeof(int), 1, reader);
+	a = (unsigned char)ReadFromBuffer();
+	a |= (((unsigned char)ReadFromBuffer()) << 8);
+	a |= (((unsigned char)ReadFromBuffer()) << 16);
+	a |= (((unsigned char)ReadFromBuffer()) << 24);
 	bitPos = -1;
 	return a;
 }
@@ -68,11 +90,11 @@ char* BinaryReader::ReadName()
 	char* s = new char[1000];
 	int i;
 	CompleteByte();
-	fread(&curByte, 1, 1, reader);
+	curByte = ReadFromBuffer();
 	for (i = 0; curByte != '\0'; i++)
 	{
 		s[i] = curByte;
-		fread(&curByte, 1, 1, reader);
+		curByte = ReadFromBuffer();
 	}
 	bitPos = -1;
 	s[i] = '\0';
@@ -90,16 +112,49 @@ BinaryReader::BinaryReader(const char* fileName)
 	fopen_s(&reader, fileName, "rb");
 	bitPos = 7;
 	if (reader)
-		fread(&curByte, 1, 1, reader);
+	{
+		fileLength = FileLength();
+		bufferIndex = 0;
+		bufferSize = fileLength < maxBufferSize ? fileLength : maxBufferSize;
+		buffer = new char[bufferSize];
+		fileIndex = bufferSize;
+		fread(buffer, bufferSize, 1, reader);
+		curByte = ReadFromBuffer();
+	}
 	else
+	{
+		fileLength = 0;
+		bufferIndex = 0;
+		bufferSize = 0;
+		buffer = NULL;
 		curByte = 0;
+		fileIndex = 0;
+	}
 }
 
 BinaryReader::BinaryReader(FILE* file)
 {
 	reader = file;
 	bitPos = 7;
-	fread(&curByte, 1, 1, reader);
+	if (reader)
+	{
+		fileLength = FileLength();
+		bufferIndex = 0;
+		bufferSize = fileLength < maxBufferSize ? fileLength : maxBufferSize;
+		buffer = new char[bufferSize];
+		fileIndex = bufferSize;
+		fread(buffer, bufferSize, 1, reader);
+		curByte = ReadFromBuffer();
+	}
+	else
+	{
+		fileLength = 0;
+		bufferIndex = 0;
+		bufferSize = 0;
+		buffer = NULL;
+		curByte = 0;
+		fileIndex = 0;
+	}
 }
 
 BinaryReader::~BinaryReader()
