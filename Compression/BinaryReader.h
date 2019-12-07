@@ -10,7 +10,7 @@ private:
 
 	//Buffer
 	size_t bufferSize;
-	const size_t maxBufferSize = 4194304;
+	const size_t maxBufferSize = 4194304;//33554432
 	char* buffer;
 	size_t bufferIndex;
 	size_t fileLength;
@@ -21,6 +21,7 @@ public:
 	bool IsOpened();
 	bool IsEOF();
 	int FileLength();
+	void Reset();
 	void EmptyByte();
 	char ReadBit();
 	char ReadByte();

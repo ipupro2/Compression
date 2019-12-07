@@ -8,23 +8,22 @@ void Swap(Node*& a, Node*& b)
 }
 
 //Hàm đếm tần suất xuất hiện của các ký tự trong file và trả về một vector các node của cây Huffman
-vector<Node*> CountFrequency(FILE*& inFile)
+vector<Node*> CountFrequency(BinaryReader& reader)
 {
 	vector<Node*> datas;
-	fseek(inFile, 0, SEEK_SET);
 	unsigned char c = 0;
 
 	//Để tối ưu tốc độ đọc file, tạo trước 1 vector của tần suất
 	//có 256 phần tử tương ứng 256 ký tự khác nhau của 1 bytes
 	vector<int> freqs(256);
-	fread(&c, 1, 1, inFile);
+	c = reader.ReadByte();
 	//Đọc hết file và tăng tần suất tại địa điểm c
-	while (!feof(inFile))
+	while (!reader.IsEOF())
 	{
 		freqs[(int)c]++;
-		fread(&c, 1, 1, inFile);
+		c = reader.ReadByte();
 	}
-
+	datas.reserve(256);
 	for (int i = 0; i < 256; i++)
 	{
 		//Nếu tần suất của ký tự freqs[i] là khác 0, tức có xuất hiện trong file
@@ -35,5 +34,6 @@ vector<Node*> CountFrequency(FILE*& inFile)
 			datas.push_back(node);
 		}
 	}
+	reader.Reset();
  	return datas;
 }

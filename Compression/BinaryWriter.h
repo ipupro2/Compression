@@ -10,17 +10,17 @@ private:
 
 	char* buffer;
 	size_t bufferIndex;
-	const size_t maxBufferSize = 4194304;
+	const size_t maxBufferSize = 4194304;//33554432
 
-	void WriteToBuffer(char c);
+	void WriteToBuffer(const char& c);
 public:
 	bool IsOpened();
 	char RemainBits();
 	void MoveTo(int index);
 	void FullByte();
-	void WriteBit(char c);
-	void WriteByte(char c);
-	void WriteInt(int c);
+	void WriteBit(const char& c);
+	void WriteByte(const char& c);
+	void WriteInt(const int& c);
 	void WriteRemain();
 	void WriteBuffer();
 

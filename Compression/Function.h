@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include <cstdio>
+#include "BinaryReader.h"
 using namespace std;
 
 struct Node
@@ -13,4 +14,4 @@ struct Node
 };
 
 void Swap(Node*& a, Node*& b);
-vector<Node*> CountFrequency(FILE*& inFile);
+vector<Node*> CountFrequency(BinaryReader& reader);

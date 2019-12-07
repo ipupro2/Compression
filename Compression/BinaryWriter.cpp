@@ -1,6 +1,6 @@
 ﻿#include "BinaryWriter.h"
 
-void BinaryWriter::WriteToBuffer(char c)
+void BinaryWriter::WriteToBuffer(const char& c)
 {
 	buffer[bufferIndex++] = c;
 	if (bufferIndex >= maxBufferSize)
@@ -38,7 +38,7 @@ void BinaryWriter::FullByte()
 }
 
 //Ghi 1 bit vào byte tạm nếu đủ 8 bit thì bắt đầu ghi vào file
-void BinaryWriter::WriteBit(char c)
+void BinaryWriter::WriteBit(const char& c)
 {
 	if(c==1)
 		curByte |= 1 << bytePos;
@@ -48,7 +48,7 @@ void BinaryWriter::WriteBit(char c)
 
 //Hàm này dùng để ghi số int vào file
 //nhưng chỉ tối ưu cho câu trúc đang sử dụng bên huffman của project này
-void BinaryWriter::WriteInt(int c)
+void BinaryWriter::WriteInt(const int& c)
 {
 	WriteRemain();
 	WriteToBuffer((char)(c & 0xFF));
@@ -57,7 +57,7 @@ void BinaryWriter::WriteInt(int c)
 	WriteToBuffer((char)((c >> 24) & 0xFF));
 }
 
-void BinaryWriter::WriteByte(char c)
+void BinaryWriter::WriteByte(const char& c)
 {
 	if (bytePos == 7)
 	{

@@ -50,14 +50,14 @@ void DeleteTree(Node* root)
 
 //Xây dựng codebook bằng cách duyệt cây huffman và lưu vào biến codeBook
 //Hàm này duyệt tất cả các node của cây nhưng ưu tiên bên trái trước
-void BuildCodeBook(Node* root, unordered_map<char, string>& codeBook, string cur)
+void BuildCodeBook(Node* root, vector<string>& codeBook, string cur)
 {
 	if (root == NULL)
 		return;
 	//Nếu đây là nút ra thì tạo thêm 1 codebook mới
 	if (IsLeaf(root))
 	{
-		codeBook[root->data] = cur;
+		codeBook[(unsigned char)root->data] = cur;
 		return;
 	}
 

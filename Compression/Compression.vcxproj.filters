@@ -64,12 +64,10 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="in.txt">
-      <Filter>Resource Files</Filter>
-    </Text>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="a.tz">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="in.txt">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>

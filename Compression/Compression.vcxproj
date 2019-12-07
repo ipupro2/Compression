@@ -142,10 +142,8 @@
     <ClInclude Include="Huffman.h" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="in.txt" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="a.tz" />
+    <None Include="in.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

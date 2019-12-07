@@ -38,6 +38,17 @@ int BinaryReader::FileLength()
 	return length;
 }
 
+void BinaryReader::Reset()
+{
+	fseek(reader, 0, SEEK_SET);
+	bitPos = 7;
+	bufferIndex = 0;
+	bufferSize = fileLength < maxBufferSize ? fileLength : maxBufferSize;
+	fileIndex = bufferSize;
+	fread(buffer, bufferSize, 1, reader);
+	curByte = ReadFromBuffer();
+}
+
 void BinaryReader::EmptyByte()
 {
 	if (bitPos == -1)
@@ -159,5 +170,8 @@ BinaryReader::BinaryReader(FILE* file)
 
 BinaryReader::~BinaryReader()
 {
-	fclose(reader);
+	if (buffer)
+		delete[] buffer;
+	if(reader)
+		fclose(reader);
 }

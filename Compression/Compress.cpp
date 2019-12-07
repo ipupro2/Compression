@@ -51,7 +51,8 @@ void EncodeFileData(BinaryReader& reader, BinaryWriter& writer, vector<Node*>& d
 {
 	Node* node = BuildHuffmanTree(datas);
 	
-	unordered_map<char, string> codeBook;
+	vector<string> codeBook;
+	codeBook.resize(256);
 	BuildCodeBook(node, codeBook);
 
 	//Lưu cây lại
@@ -64,7 +65,7 @@ void EncodeFileData(BinaryReader& reader, BinaryWriter& writer, vector<Node*>& d
 	int length = 0;
 	while (!reader.IsEOF())
 	{
-		code = codeBook[c];
+		code = codeBook[(unsigned char)c];
 		for (int i = 0; i < code.size(); i++)
 		{
 			length++;
@@ -80,19 +81,14 @@ void Compress(const char* inFileName, BinaryWriter &writer, const char* director
 	char* filePath = new char[1000];
 	strcpy_s(filePath, 1000, directory);
 	strcat_s(filePath, 1000, inFileName);
-	FILE* inFile;
-	fopen_s(&inFile, filePath, "rb");
-
-	if (!(inFile && writer.IsOpened()))
+	BinaryReader reader(filePath);
+	if (!(reader.IsOpened() && writer.IsOpened()))
 	{
-		if (inFile)
-			fclose(inFile);
 		cout << "File's not exist\n";
 		return;
 	}
 
-	vector<Node*> datas = CountFrequency(inFile);
-	fclose(inFile);
+	vector<Node*> datas = CountFrequency(reader);
 
 	EncodeDescription(writer, inFileName, datas);
 
@@ -104,7 +100,7 @@ void Compress(const char* inFileName, BinaryWriter &writer, const char* director
 		writer.WriteInt(0);
 		return;
 	}
-	BinaryReader reader(filePath);
+
 	EncodeFileData(reader, writer, datas);
 }
 
