@@ -11,7 +11,7 @@ Node* CreateNode(char data, int freq)
 
 bool IsLeaf(Node* node)
 {
-	return (node->left == NULL && node->right == NULL);
+	return node->left == NULL;
 }
 
 void PrintTree(Node* node)
