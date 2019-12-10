@@ -129,5 +129,6 @@ BinaryWriter::~BinaryWriter()
 	WriteBuffer();
 	if(buffer)
 		delete[] buffer;
-	fclose(writer);
+	if(writer)
+		fclose(writer);
 }

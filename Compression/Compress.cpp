@@ -176,29 +176,30 @@ void Decompress(const char* folder, BinaryReader& reader, bool header)
 		strcat_s(filePath, 1000, outFileName);
 
 		BinaryWriter writer(filePath);
+		if (!writer.IsOpened())
+		{
+			cout << "Cannot write file " << outFileName << "\n";
+			return;
+		}
 		delete[] outFileName;
 		delete[] filePath;
-		if (!writer.IsOpened())
-			return;
-
 		Node* node = DecodeTree(reader);
 		
 		//Đọc số lượng ký tự có trong file gốc
 		int length = reader.ReadInt();
 
-		string bits;
 		char temp = 0;
 		char c;
+		Node* tempNode = node;
 		if (length != 0)
 		{
 			c = reader.ReadBit();
 			while (!reader.IsEOF())
 			{
-				bits += c;
-				if (Traverse(node, bits, temp))
+				if (Traverse(tempNode, c, temp))
 				{
+					tempNode = node;
 					writer.WriteByte(temp);
-					bits = "";
 					length--;
 				}
 				if (length == 0)

@@ -141,10 +141,6 @@
     <ClInclude Include="MinHeap.h" />
     <ClInclude Include="Huffman.h" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="a.tz" />
-    <None Include="in.txt" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

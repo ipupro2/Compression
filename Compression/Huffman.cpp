@@ -69,24 +69,20 @@ void BuildCodeBook(Node* root, vector<string>& codeBook, string cur)
 
 //index là vị trí đang xét trong chuỗi bit, 
 //nếu duyệt hết chuỗi s đúng ngay node lá thì đó chính là giá trị cần tìm
-bool Traverse(Node* dict, string& s, char& c, int index)
+bool Traverse(Node*& node, char& bit, char& c)
 {
-	if (dict == NULL)
+	if (node == NULL)
 		return 0;
-	if (IsLeaf(dict))
+	if (bit == 0)
+		node = node->left;
+	else
+		node = node->right;
+	if (IsLeaf(node))
 	{
-		if (index == s.length())
-		{
-			c = dict->data;
-			return 1;
-		}
-		return 0;
+		c = node->data;
+		return 1;
 	}
-	if (index >= s.length())
-		return 0;
-	if (s[index] == 0)
-		return Traverse(dict->left, s, c, index + 1);
-	return Traverse(dict->right, s, c, index + 1);
+	return 0;
 }
 
 //For debug only

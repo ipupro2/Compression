@@ -15,5 +15,5 @@ Node* BuildHuffmanTree(vector<Node*>& datas);
 void DeleteTree(Node* root);
 void BuildCodeBook(Node* root, vector<string>& codeBook, string cur = "");
 void PrintCodeBook(CodeBook& dict);
-bool Traverse(Node* dict, string& s, char& c, int index = 0);
+bool Traverse(Node*& node, char& bit, char& c);
 void PrintTree(Node* node);

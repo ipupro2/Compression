@@ -63,12 +63,4 @@
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
-  <ItemGroup>
-    <None Include="a.tz">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="in.txt">
-      <Filter>Resource Files</Filter>
-    </None>
-  </ItemGroup>
 </Project>
