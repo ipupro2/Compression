@@ -1,4 +1,4 @@
-#include "FolderProcessing.h"
+﻿#include "FolderProcessing.h"
 
 void CompressFolder(const char* folderName, BinaryWriter& writer, bool header)
 {
@@ -8,6 +8,7 @@ void CompressFolder(const char* folderName, BinaryWriter& writer, bool header)
 	vector<char*> directoriesNames;
 	vector<char*> fileNames;
 	WIN32_FIND_DATA	find;
+	//Liệt kê tất cả các files và folders trong folder này
 	HANDLE hFind = FindFirstFile(directory, &find);
 
 	directory[nameLength - 1] = '\0';
@@ -33,12 +34,15 @@ void CompressFolder(const char* folderName, BinaryWriter& writer, bool header)
 	} while (FindNextFile(hFind, &find));
 	FindClose(hFind);
 
+	//Ghi header vào file
 	if (header)
 	{
 		writer.WriteByte('t');
 		writer.WriteByte('z');
 	}
 	writer.WriteInt(directoriesNames.size());
+
+	//Duyệt qua từng thư mục và đệ quy để nén các thư mục đó
 	for (int i = 0; i < directoriesNames.size(); i++)
 	{
 		char* temp = new char[1000];
@@ -53,6 +57,7 @@ void CompressFolder(const char* folderName, BinaryWriter& writer, bool header)
 	}
 	writer.WriteInt(fileNames.size());
 
+	//Duyệt qua từng file và nén từng file
 	for (int i = 0; i < fileNames.size(); i++)
 	{
 		Compress(fileNames[i], writer, directory);

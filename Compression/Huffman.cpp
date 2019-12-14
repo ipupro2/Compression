@@ -1,5 +1,6 @@
 ﻿#include "Huffman.h"
 
+//Tạo một node mới với dữ liệu là data và tần số là freq
 Node* CreateNode(char data, int freq)
 {
 	Node* node = new Node();
@@ -9,20 +10,13 @@ Node* CreateNode(char data, int freq)
 	return node;
 }
 
+//Kiểm tra 1 node có phải node lá không
 bool IsLeaf(Node* node)
 {
 	return node->left == NULL;
 }
 
-void PrintTree(Node* node)
-{
-	if (node == NULL)
-		return;
-	cout << node->data << ": " << node->freq << "\n";
-	PrintTree(node->left);
-	PrintTree(node->right);
-}
-
+//Xây dựng cây huffman từ vector các Node
 Node* BuildHuffmanTree(vector<Node*>& datas)
 {
 	MinHeap heap(datas);
@@ -39,6 +33,7 @@ Node* BuildHuffmanTree(vector<Node*>& datas)
 	return heap.ExtractMin();
 }
 
+//Hủy cấp phát các node của cây
 void DeleteTree(Node* root)
 {
 	if (root == NULL)
@@ -65,18 +60,17 @@ void BuildCodeBook(Node* root, vector<string>& codeBook, string cur)
 	BuildCodeBook(root->right, codeBook, cur + "1");
 }
 
-//Duyệt cây Huffman để tìm node lá theo chuỗi bit s, sau đó gán cho c
-
-//index là vị trí đang xét trong chuỗi bit, 
-//nếu duyệt hết chuỗi s đúng ngay node lá thì đó chính là giá trị cần tìm
+//Duyệt cây Huffman để tìm node lá theo bit, sau đó gán cho c
 bool Traverse(Node*& node, char& bit, char& c)
 {
 	if (node == NULL)
 		return 0;
+	//Nếu bit này là 0 thì đi sang trái, 1 thì đi sáng phải
 	if (bit == 0)
 		node = node->left;
 	else
 		node = node->right;
+	//Nếu đi đến node lá thì gán cho c dữ liệu node lá
 	if (IsLeaf(node))
 	{
 		c = node->data;

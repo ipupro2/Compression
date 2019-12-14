@@ -2,12 +2,15 @@
 
 char BinaryReader::ReadFromBuffer()
 {
+	//Nếu bufferSize = 0 thì file đã hết, đọc thêm 1 byte để feof biết đã hết file
 	if (bufferSize == 0)
 	{
 		fread(buffer, 1, 1, reader);
 		return 0;
 	}
 	char c = buffer[bufferIndex++];
+
+	//Nếu đã đọc đến hết buffer thì đọc tiếp
 	if (bufferIndex >= bufferSize && ! IsEOF())
 	{
 		bufferSize = (fileLength - fileIndex) < maxBufferSize ? (fileLength - fileIndex) : maxBufferSize;
@@ -88,6 +91,7 @@ char BinaryReader::ReadByte()
 int BinaryReader::ReadInt()
 {
 	int a;
+	//Đọc 4 byte của int và ghép lại bằng phép or
 	a = (unsigned char)ReadFromBuffer();
 	a |= (((unsigned char)ReadFromBuffer()) << 8);
 	a |= (((unsigned char)ReadFromBuffer()) << 16);
