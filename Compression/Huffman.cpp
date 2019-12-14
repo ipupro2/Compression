@@ -84,12 +84,3 @@ bool Traverse(Node*& node, char& bit, char& c)
 	}
 	return 0;
 }
-
-//For debug only
-void PrintCodeBook(CodeBook& dict)
-{
-	for (Word word : dict)
-	{
-		cout << word.key << ": " << word.bits << "\n";
-	}
-}

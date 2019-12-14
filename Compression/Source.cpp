@@ -17,7 +17,7 @@ int main()
 		{
 			char* s1 = new char[100];
 			char* s2 = new char[100];
-			cout << "Input name: ";
+			cout << "Input file: ";
 			cin.ignore(1);
 			cin.getline(s1, 100);
 			cout << "Output file: ";
@@ -40,7 +40,7 @@ int main()
 		{
 			char* s1 = new char[1000];
 			char* s2 = new char[1000];
-			cout << "Input name: ";
+			cout << "Input folder: ";
 			cin.ignore(1);
 			cin.getline(s1, 1000);
 			strcat_s(s1, 1000, "/*");
@@ -64,7 +64,7 @@ int main()
 		{
 			char* s1 = new char[1000];
 			char* s2 = new char[1000];
-			cout << "Input name: ";
+			cout << "Input file: ";
 			cin.ignore(1);
 			cin.getline(s1, 1000);
 			cout << "Output folder: ";

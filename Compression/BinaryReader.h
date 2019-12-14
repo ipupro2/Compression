@@ -9,18 +9,18 @@ private:
 	int bitPos;
 
 	//Buffer
-	size_t bufferSize;
-	const size_t maxBufferSize = 4194304;//33554432
+	long long bufferSize;
+	const long long maxBufferSize = 4194304;//33554432
 	char* buffer;
-	size_t bufferIndex;
-	size_t fileLength;
-	size_t fileIndex;
+	long long bufferIndex;
+	long long fileLength;
+	long long fileIndex;
 
 	char ReadFromBuffer();
 public:
 	bool IsOpened();
 	bool IsEOF();
-	int FileLength();
+	long long FileLength();
 	void Reset();
 	void EmptyByte();
 	char ReadBit();

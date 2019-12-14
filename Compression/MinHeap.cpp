@@ -2,17 +2,17 @@
 
 int MinHeap::Size()
 {
-	return this->fileSize;
+	return this->size;
 }
 
 void MinHeap::Heapify(int pos)
 {
-	if (2 * pos >= fileSize - 1)
+	if (2 * pos >= size - 1)
 		return;
 	int left = 2 * pos + 1;
 	int right = 2 * pos + 2;
 	int index = left;
-	if (right < fileSize && datas[right]->freq < datas[left]->freq)
+	if (right < size && datas[right]->freq < datas[left]->freq)
 		index = right;
 	if (datas[pos]->freq > datas[index]->freq)
 	{
@@ -31,15 +31,15 @@ void MinHeap::Insert(Node* data)
 		else
 			break;
 	}
-	fileSize++;
+	size++;
 }
 
 //Trả về giá trị nhỏ nhất trong min heap(tức root) và loại nó ra khỏi heap
 Node* MinHeap::ExtractMin()
 {
 	Node* node = datas[0];
-	fileSize--;
-	Swap(datas[0], datas[fileSize]);
+	size--;
+	Swap(datas[0], datas[size]);
 	datas.pop_back();
 
 	Heapify(0);
@@ -48,13 +48,13 @@ Node* MinHeap::ExtractMin()
 
 MinHeap::MinHeap()
 {
-	fileSize = 0;
+	size = 0;
 }
 
 MinHeap::MinHeap(vector<Node*>& inData)
 {
-	fileSize = inData.size();
+	size = inData.size();
 	datas = inData;
-	for (int i = fileSize / 2 - 1; i >= 0; i--)
+	for (int i = size / 2 - 1; i >= 0; i--)
 		Heapify(i);
 }

@@ -5,7 +5,7 @@
 class MinHeap
 {
 	vector<Node*> datas;
-	int fileSize;
+	int size;
 
 public:
 	int Size();

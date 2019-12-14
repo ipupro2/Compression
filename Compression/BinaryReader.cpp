@@ -29,12 +29,12 @@ bool BinaryReader::IsEOF()
 	return feof(reader);
 }
 
-int BinaryReader::FileLength()
+long long BinaryReader::FileLength()
 {
-	int curPos = ftell(reader);
-	fseek(reader, 0, SEEK_END);
-	int length = ftell(reader);
-	fseek(reader, curPos, SEEK_SET);
+	long long curPos = _ftelli64(reader);
+	_fseeki64(reader, 0, SEEK_END);
+	long long length = _ftelli64(reader);
+	_fseeki64(reader, curPos, SEEK_SET);
 	return length;
 }
 

@@ -21,11 +21,6 @@ char BinaryWriter::RemainBits()
 	return bytePos;
 }
 
-void BinaryWriter::MoveTo(int index)
-{
-	fseek(writer, index, SEEK_SET);
-}
-
 //Kiểm tra nếu byte hiện tại đủ 8 bit chưa, nếu rồi thì ghi nó vào file
 void BinaryWriter::FullByte()
 {
@@ -85,7 +80,7 @@ void BinaryWriter::WriteRemain()
 
 BinaryWriter::BinaryWriter(const char* fileName)
 {
-	fopen_s(&writer, fileName, "wb");
+	writer = fopen(fileName, "wb");
 	if (writer)
 	{
 		buffer = new char[maxBufferSize];

@@ -54,7 +54,6 @@ void EncodeFileData(BinaryReader& reader, BinaryWriter& writer, vector<Node*>& d
 	vector<string> codeBook;
 	codeBook.resize(256);
 	BuildCodeBook(node, codeBook);
-
 	//Lưu cây lại
 	EncodeTree(writer, node);
 	writer.WriteInt(node->freq);
@@ -66,7 +65,9 @@ void EncodeFileData(BinaryReader& reader, BinaryWriter& writer, vector<Node*>& d
 	while (!reader.IsEOF())
 	{
 		code = codeBook[(unsigned char)c];
-		for (int i = 0; i < code.size(); i++)
+
+		int codeLength = code.size();
+		for (int i = 0; i < codeLength; i++)
 		{
 			length++;
 			writer.WriteBit(code[i] - '0');
@@ -100,7 +101,14 @@ void Compress(const char* inFileName, BinaryWriter &writer, const char* director
 		writer.WriteInt(0);
 		return;
 	}
-
+	//Trường hợp file chỉ xuất hiện 1 ký tự thì không thể duyệt cây như bình thường
+	else if (datas.size() == 1)
+	{
+		writer.WriteBit(1);
+		writer.WriteByte(datas[0]->data);
+		writer.WriteInt(datas[0]->freq);
+		return;
+	}
 	EncodeFileData(reader, writer, datas);
 }
 
@@ -193,22 +201,36 @@ void Decompress(const char* folder, BinaryReader& reader, bool header)
 		Node* tempNode = node;
 		if (length != 0)
 		{
-			c = reader.ReadBit();
-			while (!reader.IsEOF())
+			//Trường hợp cây chỉ có 1 node
+			if (node->left == NULL && node->right == NULL)
 			{
-				if (Traverse(tempNode, c, temp))
+				for (int i = 0; i < length; i++)
 				{
-					tempNode = node;
-					writer.WriteByte(temp);
-					length--;
+					writer.WriteByte(node->data);
 				}
-				if (length == 0)
-					break;
-				c = reader.ReadBit();
 			}
-			writer.WriteRemain();
-			if (length != 0)
-				cout << "File is corrupted!\n";
+			else
+			{
+				c = reader.ReadBit();
+				while (!reader.IsEOF())
+				{
+					if (Traverse(tempNode, c, temp))
+					{
+						tempNode = node;
+						writer.WriteByte(temp);
+						length--;
+					}
+					if (length == 0)
+						break;
+					c = reader.ReadBit();
+				}
+				writer.WriteRemain();
+				if (length != 0)
+				{
+					cout << "Length is " << length << "\n";
+					cout << "File is corrupted!\n";
+				}
+			}
 		}
 		DeleteTree(node);
 		reader.CompleteByte();

@@ -1,6 +1,8 @@
 #pragma once
+#define _CRT_SECURE_NO_WARNINGS
 #include <cstdio>
 #include <cstring>
+
 class BinaryWriter
 {
 private:
@@ -16,7 +18,6 @@ private:
 public:
 	bool IsOpened();
 	char RemainBits();
-	void MoveTo(int index);
 	void FullByte();
 	void WriteBit(const char& c);
 	void WriteByte(const char& c);
